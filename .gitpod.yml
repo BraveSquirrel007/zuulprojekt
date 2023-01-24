@@ -1,0 +1,9 @@
+tasks:
+  - name: Compile Java Files
+    command: javac *.java
+  - name: Launch Game
+    command: java Game
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
