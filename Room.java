@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 /*
  * Class Room - a room in an adventure game.
  *
@@ -16,11 +18,7 @@
 class Room 
 {
     public String description;
-    public Room northExit;
-    public Room southExit;
-    public Room eastExit;
-    public Room westExit;
-
+    private HashMap<String, Room> exits;  
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -29,22 +27,20 @@ class Room
     public Room(String description) 
     {
         this.description = description;
+    exits=new HashMap<>();
     }
 
     /**
      * Define the exits of this room.  Every direction either leads
      * to another room or is null (no exit there).
      */
-    public void setExits(Room north, Room east, Room south, Room west) 
+    public void setExit(String direction, Room neighbor) 
     {
-        if(north != null)
-            northExit = north;
-        if(east != null)
-            eastExit = east;
-        if(south != null)
-            southExit = south;
-        if(west != null)
-            westExit = west;
+        System.out.println("Exit added for room " + description+ ": " + direction + " - " + neighbor);
+        exits.put(direction, neighbor);
+
+        if ( getExit(direction) != null) System.out.println("Exit gefunden: " + direction);
+
     }
 
     /**
@@ -54,6 +50,15 @@ class Room
     public String getDescription()
     {
         return description;
+    }
+    public Room getExit(String direction){
+      /**  System.out.println("Room: Key vorhanden: " + direction + " - " + exits.containsKey( direction));
+        System.out.println("Room: Room für Key vorhanden: " + (exits.get(direction) != null));*/
+        return exits.get(direction);
+    }
+
+    public void printExits(){
+        System.out.println( exits.keySet() );
     }
 
 }
