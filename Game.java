@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * This class is the main class of the "World of Zuul" application.
  * "World of Zuul" is a very simple, text based adventure game. Users
@@ -18,7 +20,9 @@
 class Game {
     Room Regia, Aedes_Vestae, Castor_Tempel, Basilica_Sempronia, Basilica_Amilia, Templum_Saturni, Triumphbogen, Curia,
             Templum_Concordia, Vor_der_Curia;
+    Item Carti, Gladius_Brevis;
     Amicus amicus;
+    ArrayList<Item> inventory = new ArrayList<Item>();
 
     // ~~~ initialization ~~~
     public static void main(String args[]) {
@@ -34,6 +38,7 @@ class Game {
      */
     public Game() {
         createRooms();
+        createItems();
         amicus = new Amicus("Crassus", Templum_Concordia);
         parser = new Parser();
     }
@@ -54,6 +59,7 @@ class Game {
         Curia = new Room("unbefugt im Rathaus");
         Templum_Concordia = new Room("vor dem Tempel der Concordia");
         Vor_der_Curia = new Room("vor dem römischen Rathaus"); // initialise room exits
+
         Regia.setExit("south", Aedes_Vestae);
         Regia.setExit("north", Basilica_Amilia);
         Regia.setExit("northwest", Triumphbogen);
@@ -102,6 +108,13 @@ class Game {
         Triumphbogen.setExit("northeast", Basilica_Amilia);
 
         currentRoom = Regia; // start game outside
+    }
+
+    private void createItems(){
+        Carti = new Item("Carti");
+        Triumphbogen.setItem(Carti);
+        Gladius_Brevis = new Item("Gladius Brevis");
+        Castor_Tempel.setItem(Gladius_Brevis);
     }
 
     /**
@@ -173,7 +186,9 @@ class Game {
             wantToQuit = look();
         else if (commandWord.equals("quit"))
             wantToQuit = quit(command);
-
+        else if (commandWord.equals("inventory")) {
+            printInventory();
+        }
         if (currentRoom == Curia) {
             System.out.print("Du hast die Curia unbefugt betreten und wirst nun in den Kerker gesteckt!");
             return true;
@@ -182,13 +197,24 @@ class Game {
         return wantToQuit;
     }
 
+    private void printInventory() {
+        String output = " ";
+        for (int i = 0; i < inventory.size(); i++) {
+            output += inventory.get(i).getDescription() + " ";
+        }
+        System.out.println("du hast bei dir:");
+        System.out.print(output);
+    }
+
     // implementations of user commands:
     private boolean look() {
         if (currentRoom == amicus.getLocation()) {
             System.out.println("du hast deinen Amicus gefunden, du kannst nun das Forum verlassen!");
             return true;
-        } else
-          {  return false;}
+        } else {
+            printLocationInfo();
+            return false;
+        }
     }
 
     /**
@@ -278,6 +304,12 @@ class Game {
         }
         if (currentRoom.getExit("west") != null) {
             System.out.print("west ");
+        }
+        System.out.println();
+        System.out.print("Items: ");
+
+        for (Item i : currentRoom.getItems()) {
+            System.out.print(i.getDescription());
         }
         System.out.println();
     }

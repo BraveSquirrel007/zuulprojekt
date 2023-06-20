@@ -1,13 +1,11 @@
-public class Item
-{
+public class Item {
     String description;
 
-    public Item(String newdescription){
+    public Item(String newdescription) {
         description = newdescription;
     }
 
-
-public String getDescription(){
-    return description;
-}
+    public String getDescription() {
+        return description;
+    }
 }
